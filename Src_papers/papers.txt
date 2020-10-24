@@ -1,0 +1,85 @@
+create database papers;
+
+use papers;
+
+create table administrador(
+	rut_adm int(10)  unsigned not null,
+    	nombre_adm varchar(60) not null,
+	primary key (rut_adm)
+	);
+	
+create table cliente(
+	id_cli mediumint(6) unsigned not null,
+	rut_cli int(10)  unsigned not null,
+    nombre_cli varchar(60) not null,
+	primary key (id_cli)
+	);
+
+create table paper(
+	id_paper int(10) unsigned not null,
+    	nombre_paper varchar(60) not null,
+    	autor varchar(60) not null,
+    	precio int(6) unsigned not null,
+    	fecha_lan date not null,
+    	rut_adm int(10) unsigned not null,
+    	id_orden int (10) unsigned not null,
+	primary key (id_paper)
+	);
+
+create table caregoriaspap(
+	id_paper int(10) unsigned not null,
+	categoria varchar(60) not null,
+	primary key(categoria)
+	);
+
+create table orden(
+	id_orden  int(10) unsigned not null,
+	monto int(7) unsigned not null,
+    	fecga date not null,
+    	id_cli mediumint(6) unsigned not null,
+	primary key(id_orden)
+	);
+
+create table adm_pap(
+	id_paper int(10) unsigned not null,
+	rut_adm int(10) unsigned not null
+	);
+
+
+alter table paper
+	add constraint paper_fk_rut_adm
+	foreign key (rut_adm) references administrador(rut_adm)
+	on update cascade
+	on delete cascade;
+
+alter table paper
+	add constraint paper_fk_id_orden
+	foreign key (id_orden) references orden(id_orden)
+	on update cascade
+	on delete cascade;
+
+
+alter table categoriaspap
+	add constraint categoriaspap_fk_id_paper
+	foreign key (id_paper) references paper(id_paper)
+	on update cascade
+	on delete cascade;
+
+
+alter table orden
+	add constraint orden_fk_id_cli
+	foreign key (id_cli) references cliente(id_cli)
+	on update cascade
+	on delete cascade;
+
+alter table adm_pap
+	add constraint adm_pap_fk_id_paper
+	foreign key (id_paper) references paper(id_paper)
+	on update cascade
+	on delete cascade;
+
+alter table adm_pap
+	add constraint empleado_fk_rut_adm
+	foreign key (rut_adm) references administrador(rut_adm)
+	on update cascade
+	on delete cascade;
