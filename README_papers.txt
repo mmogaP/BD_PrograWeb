@@ -1,1 +1,0 @@
-Todos los archivos pedidos se encuentran dentro de la carpeta papers/documentos
