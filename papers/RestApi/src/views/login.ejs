@@ -1,46 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-        <title>Paper, please</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" >
-    </head>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Login V16</title>
+
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../public/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+<!--===============================================================================================-->
+</head>
 <body>
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="/index">Paper, please </a>
-          </div>
-          <ul class="nav navbar-nav">
-            <li class="active"> <a href="/index">Home  </a>  </li>
-            <li>  <a href="/registrar">Registrarse  </a>  </li>
-            <li>  <a href="/">Administrar </a> </li>
-          </ul>
-          <form class="navbar-form navbar-left" action="/buscar">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Nombre del paper buscado" id="buscado" onkeyup="busqueda()">
-  
-              <div class="input-group-btn">
-                <button class="btn btn-default" type="submit">
-                  <i class="glyphicon glyphicon-search">  </i>
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-    </nav>
-    <div class="mid">
-        <div class='col-md-4 mt-6 card'>
-            <form action="/login" method="POST">
-                <label for="fname">Usuario</label>
-                <input type="text" name="username" id="username" class="form-control" placeholder="Rut" required>
-                <label for="fmane">Contrasseña</label>
-                <input type="password" name="password" id="password" class="form-control" placeholder="Contraseña" required>
-                <input type="submit" value="Enviar">
-            </form>
-            <!--<a href="/registrar">registrar</a>-->
-        </div> 
-    </div> 
+	<div class="limiter">
+
+		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+			<div class="wrap-login100 p-t-30 p-b-50">
+				<span class="login100-form-title p-b-41">
+					Administrar
+				</span>
+				<form class="login100-form validate-form p-b-33 p-t-5" action="/login" method="POST">
+
+					<div class="wrap-input100 validate-input" data-validate = "Enter username">
+						<input class="input100" type="text" name="username" id="username" placeholder="User name" required >
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Enter password">
+						<input class="input100" type="password" name="password" id="password" placeholder="Password" required>
+					</div>
+
+					<div class="container-login100-form-btn m-t-32">
+						<button class="login100-form-btn" type="submit" >
+							Login
+						</button > 
+
+					</div>
+				
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+	<div id="dropDownSelect1"></div>
+
+
 </body>
 </html>

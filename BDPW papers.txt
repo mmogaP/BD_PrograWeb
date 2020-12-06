@@ -1,0 +1,155 @@
+create database papers;
+
+use papers;
+
+create table administrador(
+	rut_adm int(8) unsigned not null,
+	pasword varchar(20) not null,
+	nombre_adm varchar(60) not null,
+	primary key (rut_adm)
+	);
+
+create table cliente(
+	id_cli mediumint(6) unsigned not null,
+	pasword varchar(20) not null,
+	rut_cli int(8) unsigned not null,
+	nombre_cli varchar(60) not null,
+	primary key (id_cli)
+	);
+
+create table orden(
+	id_orden int(10) AUTO_INCREMENT not null,
+	monto int(7) unsigned not null default '0',
+	fecha date,
+	estado enum('entregado','no entregado') default 'no entregado',
+	id_cli mediumint(6) unsigned not null,
+	primary key (id_orden)
+	);
+
+create table paper(
+	id_paper int(10) AUTO_INCREMENT not null,
+	nombre_paper varchar(60) not null,
+	autor varchar (60) not null,
+	precio mediumint(6) unsigned not null,
+	fecha_lan date,
+	primary key(id_paper)
+	);
+
+create table ord_pap(
+	id_orden int(10) not null,
+	id_paper int(10) not null
+	);
+
+create table adm_pap(
+	id_paper int(10) not null,
+	rut_adm int(8) unsigned not null
+	);
+
+alter table ord_pap
+	add constraint orden_fk_id_orden
+	foreign key (id_orden) references orden(id_orden)
+	on update cascade
+	on delete cascade;
+
+alter table ord_pap
+	add constraint paper_fk_id_paper
+	foreign key (id_paper) references paper(id_paper)
+	on update cascade
+	on delete cascade;
+
+alter table orden
+	add constraint orden_fk_id_cli
+	foreign key (id_cli) references cliente(id_cli)
+	on update cascade
+	on delete cascade;
+
+alter table adm_pap
+	add constraint adm_pap_fk_id_paper
+	foreign key (id_paper) references paper(id_paper)
+	on update cascade
+	on delete cascade;
+
+alter table adm_pap
+	add constraint adm_pap_fk_rut_adm
+	foreign key (rut_adm) references administrador(rut_adm)
+	on update cascade
+	on delete cascade;
+
+INSERT INTO administrador (rut_adm,pasword,nombre_adm) VALUES (19515711,"contra","Melvin Sweet"    );
+INSERT INTO administrador (rut_adm,pasword,nombre_adm) VALUES (19587012,"contra","Harding Langley" );
+INSERT INTO administrador (rut_adm,pasword,nombre_adm) VALUES (18507479,"contra","Michael Dejesus");
+INSERT INTO administrador (rut_adm,pasword,nombre_adm) VALUES (10116225,"contra","Amir Phelps"    );
+INSERT INTO administrador (rut_adm,pasword,nombre_adm) VALUES (19308911,"contra","Grady Ellis"    );
+INSERT INTO administrador (rut_adm,pasword,nombre_adm) VALUES (18604484,"contra","Leo Sloan"      );
+INSERT INTO administrador (rut_adm,pasword,nombre_adm) VALUES (19167104,"contra","Fritz Horn"     );
+INSERT INTO administrador (rut_adm,pasword,nombre_adm) VALUES (19183476,"contra","Derek Dyer"     );
+INSERT INTO administrador (rut_adm,pasword,nombre_adm) VALUES (19045487,"contra","Beck Morin"     );
+INSERT INTO administrador (rut_adm,pasword,nombre_adm) VALUES (19345789,"contra","Jorge Muñoz"    );
+
+INSERT INTO cliente (id_cli,pasword,rut_cli,nombre_cli) VALUES (168208,"contra",8172424 ,"Inga Ferguson"    );
+INSERT INTO cliente (id_cli,pasword,rut_cli,nombre_cli) VALUES (160116,"contra",12857034,"Hall Lamb"        );
+INSERT INTO cliente (id_cli,pasword,rut_cli,nombre_cli) VALUES (160601,"contra",18667108,"Jennifer Robinson");
+INSERT INTO cliente (id_cli,pasword,rut_cli,nombre_cli) VALUES (131008,"contra",19256734,"Serena Yang"       );
+INSERT INTO cliente (id_cli,pasword,rut_cli,nombre_cli) VALUES (169519,"contra",16973206,"Clayton Barr"     );
+INSERT INTO cliente (id_cli,pasword,rut_cli,nombre_cli) VALUES (168216,"contra",17499790,"Brian Atkinson"   );
+INSERT INTO cliente (id_cli,pasword,rut_cli,nombre_cli) VALUES (162306,"contra",17353901,"Simone Branch"    );
+INSERT INTO cliente (id_cli,pasword,rut_cli,nombre_cli) VALUES (16280, "contra",10047032,"Kevyn Bradshaw"    );
+INSERT INTO cliente (id_cli,pasword,rut_cli,nombre_cli) VALUES (161419,"contra",10693931,"Bo Lucas"         );
+INSERT INTO cliente (id_cli,pasword,rut_cli,nombre_cli) VALUES (180624,"contra",13806958,"Fritz Walls"      );
+INSERT INTO cliente (id_cli,pasword,rut_cli,nombre_cli) VALUES (1,"c",19339408,"El Humilde"      );
+
+INSERT INTO orden (id_orden,monto,fecha,id_cli) VALUES (374504442,9900,"20/10/01",168208);
+INSERT INTO orden (id_orden,monto,fecha,id_cli) VALUES (368185047,12800,"20/10/01",160116);
+INSERT INTO orden (id_orden,monto,fecha,id_cli) VALUES (537044333,3400,"20/11/02",160601);
+INSERT INTO orden (id_orden,monto,fecha,id_cli) VALUES (178010021,23000,"20/11/10",131008);
+INSERT INTO orden (id_orden,monto,fecha,id_cli) VALUES (485820319,9800,"20/11/23",169519);
+INSERT INTO orden (id_orden,monto,fecha,id_cli) VALUES (899862559,10900,"20/12/24",168216);
+INSERT INTO orden (id_orden,monto,fecha,id_cli) VALUES (999517709,3600,"20/12/30",162306);
+INSERT INTO orden (id_orden,monto,fecha,id_cli) VALUES (752512069,8300,"20/12/01",16280 );
+INSERT INTO orden (id_orden,monto,fecha,id_cli) VALUES (363558029,4000,"20/12/03",161419);
+INSERT INTO orden (id_orden,monto,fecha,id_cli) VALUES (647008749,9500,"20/12/30",180624);
+INSERT INTO orden (id_orden,monto,fecha,id_cli) VALUES (647008759,900,"20/11/30",1);
+INSERT INTO orden (id_orden,monto,fecha,id_cli) VALUES (647008769,10900,"20/12/03",1);
+
+
+INSERT INTO paper (id_paper,nombre_paper,autor,precio,fecha_lan) VALUES (35365054," security paper " ,"Lance Sweet"      ,9900,"19/01/21" );
+INSERT INTO paper (id_paper,nombre_paper,autor,precio,fecha_lan) VALUES (45471119," economy research","Ronan Estes"      ,3300,"19/12/20" );
+INSERT INTO paper (id_paper,nombre_paper,autor,precio,fecha_lan) VALUES (75483992," medic paper "    ,"Macon C. Walters" ,3400,"19/11/20" );
+INSERT INTO paper (id_paper,nombre_paper,autor,precio,fecha_lan) VALUES (65533544," science paper "  ,"Lucas Love"       ,3700,"19/12/20" );
+INSERT INTO paper (id_paper,nombre_paper,autor,precio,fecha_lan) VALUES (42662681," security paper " ,"Serina T. Mayo"   ,9800,"19/02/20" );
+INSERT INTO paper (id_paper,nombre_paper,autor,precio,fecha_lan) VALUES (72598046," computing paper ","Emery R. Burton"  ,1000,"19/11/21" );
+INSERT INTO paper (id_paper,nombre_paper,autor,precio,fecha_lan) VALUES (85551507," english paper "  ,"Zenia Frost"      ,3600,"19/02/20" );
+INSERT INTO paper (id_paper,nombre_paper,autor,precio,fecha_lan) VALUES (48729547," espanish paper " ,"Cadman C. Vazquez",8300,"19/02/20" );
+INSERT INTO paper (id_paper,nombre_paper,autor,precio,fecha_lan) VALUES (42245544," tourist paper "  ,"Allen T. Cook"    ,4000,"19/03/20" );
+INSERT INTO paper (id_paper,nombre_paper,autor,precio,fecha_lan) VALUES (84254003," kitchen paper "  ,"Mason G. Mejia"   ,9500,"19/07/20" );
+INSERT INTO paper (id_paper,nombre_paper,autor,precio,fecha_lan) VALUES (69696969," Etica y Moral"  ,"Mason G. Mejia"   , 900,"20/08/29" );
+INSERT INTO paper (id_paper,nombre_paper,autor,precio,fecha_lan) VALUES (77777777," jujutsu kaisen"  ,"Lance Sweet"   , 10900,"20/12/01" );
+
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (374504442,35365054);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (368185047,45471119);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (537044333,75483992);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (178010021,65533544);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (485820319,42662681);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (899862559,72598046);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (999517709,85551507);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (752512069,48729547);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (363558029,42245544);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (647008749,84254003);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (647008749,85551507);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (368185047,84254003);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (178010021,84254003);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (899862559,35365054);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (178010021,42662681);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (647008759,69696969);
+INSERT INTO ord_pap(id_orden,id_paper) VALUES (647008769,77777777);
+
+INSERT INTO adm_pap (id_paper,rut_adm) VALUES (35365054,19515711);
+INSERT INTO adm_pap (id_paper,rut_adm) VALUES (45471119,19587012);
+INSERT INTO adm_pap (id_paper,rut_adm) VALUES (75483992,18507479);
+INSERT INTO adm_pap (id_paper,rut_adm) VALUES (65533544,10116225);
+INSERT INTO adm_pap (id_paper,rut_adm) VALUES (42662681,19308911);
+INSERT INTO adm_pap (id_paper,rut_adm) VALUES (72598046,18604484);
+INSERT INTO adm_pap (id_paper,rut_adm) VALUES (85551507,19167104);
+INSERT INTO adm_pap (id_paper,rut_adm) VALUES (48729547,19183476);
+INSERT INTO adm_pap (id_paper,rut_adm) VALUES (42245544,19045487);
+INSERT INTO adm_pap (id_paper,rut_adm) VALUES (84254003,19345789);

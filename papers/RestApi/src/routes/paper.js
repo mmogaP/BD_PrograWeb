@@ -1,18 +1,49 @@
 const express = require('express');
 const router = express.Router();
 
-const conn = require('../database');
+const conn = require('../database');  
 
-//-------------------------- ESTOO MODIFIQUE
-router.get('/admin', (req,res) => {
+const fs = require('fs');
+
+router.get('/index', (req,res) => {
     conn.query('Select * FROM paper', (err,resp,campos) => {
-        res.render('IngresoPaper.ejs',{
+        res.render('index.ejs',{
             datos: resp
         });
     });
 });
 
-router.post('/ingreso',(req, res) => {
+router.get('/catalogo_log',(req,res,next)=>{
+    if(req.isAuthenticated()) {
+        if(req.user.id_cli != undefined){
+            return next();
+        }   
+    }
+    res.redirect('/loginc');
+}, (req,res) => {
+    conn.query('Select * FROM paper', (err,resp,campos) => {
+        res.render('catalogo_log.ejs',{
+            datos: resp
+        });
+    });
+});
+
+router.get('/catalogo', (req,res) => {
+    conn.query('Select * FROM paper', (err,resp,campos) => {
+        res.render('catalogo.ejs',{
+            datos: resp
+        });
+    });
+});
+
+router.post('/ingreso',(req,res,next)=>{
+    if(req.isAuthenticated()) {
+        if(req.user.rut_adm != undefined){
+            return next();
+        }   
+    }
+    res.redirect('/loginadm');
+},(req,res) =>{
     const {id_paper, nombre_paper, autor, precio, fecha_lan} = req.body;
     conn.query('INSERT into paper SET? ',{
         id_paper: id_paper,
@@ -29,14 +60,28 @@ router.post('/ingreso',(req, res) => {
     });
 });
 
-router.get('/modificar', (req,res) => {
+router.get('/modificar', (req,res,next)=>{
+    if(req.isAuthenticated()) {
+        if(req.user.rut_adm != undefined){
+            return next();
+        }   
+    }
+    res.redirect('/loginadm');
+},(req,res) =>{
     conn.query('Select * FROM paper', (err,resp,campos) => {
         res.render('modificar.ejs',{
         });
     });
 });
 
-router.post('/cambiar', function(req, res) {
+router.post('/cambiar', (req,res,next)=>{
+    if(req.isAuthenticated()) {
+        if(req.user.rut_adm != undefined){
+            return next();
+        }   
+    }
+    res.redirect('/loginadm');
+},(req,res) =>{
     conn.query('UPDATE paper SET nombre_paper = ?, autor = ? , precio = ?, fecha_lan = ? WHERE id_paper = ?',
         [req.body.nombre_paper, req.body.autor ,req.body.precio, req.body.fecha_lan ,req.body.id_paper],
         function() {
@@ -46,7 +91,14 @@ router.post('/cambiar', function(req, res) {
     );
 });
 
-router.get('/cambiar/:id', (req,res) =>{
+router.get('/cambiar/:id',(req,res,next)=>{
+    if(req.isAuthenticated()) {
+        if(req.user.rut_adm != undefined){
+            return next();
+        }   
+    }
+    res.redirect('/loginadm');
+},(req,res) =>{
     const { id } = req.params;
     conn.query('update paper set precio = 0 where id_paper = ?', [id], (err, resp, campos) => {
         if(!err){
@@ -59,16 +111,30 @@ router.get('/cambiar/:id', (req,res) =>{
     });
 });
 
-router.get('/ganancias', (req,res)=>{
-    conn.query('select paper.nombre_paper, paper.autor, sum(paper.precio),sum(paper.precio)as total from cliente join orden join paper where cliente.id_cli=orden.id_cli and orden.id_paper=paper.id_paper group by  paper.id_paper', (err,resp,campos) => {
+router.get('/ganancias',(req,res,next)=>{
+    if(req.isAuthenticated()) {
+        if(req.user.rut_adm != undefined){
+            return next();
+        }   
+    }
+    res.redirect('/loginadm');
+}, (req,res)=>{
+    conn.query('select paper.nombre_paper, paper.autor, sum(paper.precio)as total from orden inner join paper inner join ord_pap on paper.id_paper =ord_pap.id_paper  and orden.id_orden = ord_pap.id_orden group by  paper.id_paper', (err,resp,campos) => {
             res.render('busqueda.ejs',{
             datos: resp
         });
     });
 });
 
-router.get('/vendidos', (req,res)=>{
-    conn.query('select paper.nombre_paper, paper.autor,count(paper.id_paper)as total from cliente join orden join paper  where cliente.id_cli=orden.id_cli and orden.id_paper=paper.id_paper group by paper.id_paper', (err,resp,campos) => {
+router.get('/vendidos', (req,res,next)=>{
+    if(req.isAuthenticated()) {
+        if(req.user.rut_adm != undefined){
+            return next();
+        }   
+    }
+    res.redirect('/loginadm');
+},(req,res)=>{
+    conn.query('select paper.nombre_paper, paper.autor, count(paper.id_paper)as total from orden inner join paper inner join ord_pap on paper.id_paper =ord_pap.id_paper  and orden.id_orden = ord_pap.id_orden group by paper.id_paper', (err,resp,campos) => {
             res.render('busqueda.ejs',{
             datos: resp
         });
@@ -86,7 +152,14 @@ router.get('/buscar/:b', (req,res) => {
         }    //datos: resp
     });
 });
-router.get('/eliminar/:id', (req,res) =>{
+router.get('/eliminar/:id', (req,res,next)=>{
+    if(req.isAuthenticated()) {
+        if(req.user.rut_adm != undefined){
+            return next();
+        }   
+    }
+    res.redirect('/loginadm');
+},(req,res) =>{
     const { id } = req.params;
     conn.query('DELETE from paper WHERE id_paper = ?', [id], (err, resp, campos) => {
         if(!err){
@@ -97,13 +170,7 @@ router.get('/eliminar/:id', (req,res) =>{
     });
 });
 
-router.get('/index', (req,res) => {
-    conn.query('Select * FROM paper', (err,resp,campos) => {
-        res.render('index.ejs',{
-            datos: resp
-        });
-    });
-});
+
 
 router.get('/paper/porPrecio', (req,res) => {
     conn.query('select orden.id_orden , orden.fecha, paper.precio from orden join paper on orden.id_paper = paper.id_paper where paper.precio between 3000 and 6000', (err, resp, campos) => {
@@ -146,4 +213,5 @@ router.get('/paper/Cliente', (req,res) => {
         }
     });
 });
+
 module.exports = router;

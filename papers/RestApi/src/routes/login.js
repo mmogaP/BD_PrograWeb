@@ -5,19 +5,22 @@ const passport = require('passport');
 
 const conn = require('../database');
 
-router.get('/', (req,res) =>{
+router.get('/loginadm', (req,res) =>{
     res.render('login.ejs');
 });
 
-router.post('/login',passport.authenticate('local',{
-    successRedirect: "/correcto",
-    failureRedirect: "/"
+router.post('/login',passport.authenticate('adminLocal',{
+    successRedirect: "/Admin",
+    failureRedirect: "/loginadm"
 }));
 
-router.get('/correcto', (req,res,next)=>{
-    if(req.isAuthenticated()) return next();
-    
-    res.redirect('/');
+router.get('/Admin', (req,res,next)=>{
+    if(req.isAuthenticated()) {
+        if(req.user.rut_adm != undefined){
+            return next();
+        }   
+    }
+    res.redirect('/loginadm');
 },(req,res) =>{
     conn.query('Select * FROM paper', (err,resp,campos) => {
         res.render('IngresoPaper.ejs',{
@@ -26,7 +29,14 @@ router.get('/correcto', (req,res,next)=>{
     });
 });
 
-router.post('/ingreso',(req, res) => {
+router.post('/ingreso',(req,res,next)=>{
+    if(req.isAuthenticated()) {
+        if(req.user.rut_adm != undefined){
+            return next();
+        }   
+    }
+    res.redirect('/loginadm');
+},(req, res) => {
     const {id_paper, nombre_paper, autor, precio, fecha_lan} = req.body;
     conn.query('INSERT into paper SET? ',{
         id_paper: id_paper,
@@ -42,9 +52,7 @@ router.post('/ingreso',(req, res) => {
         }
     });
 });
-router.get('/registrar', (req, res) => {
-    res.render('registro.ejs')
-})
+
 
 router.post('/registro', (req, res) => {
     const{ id_cli, contraseña, rut_cli, nombre_cli } = req.body;
@@ -55,7 +63,7 @@ router.post('/registro', (req, res) => {
         nombre_cli: nombre_cli
     }, (err, result) => {
         if(!err) {
-            res.redirect('/');
+            res.redirect('/loginc');
         } else {
             console.log(err);
         }
